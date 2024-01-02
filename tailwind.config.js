@@ -5,7 +5,11 @@ module.exports = {
     extend: {
       fontFamily: {
         pop: "'Poppins', sans-serif",
-        roboto: "'Roboto', sans-serif",
+        sans: "'Nunito Sans', sans-serif",
+      },
+      colors: {
+        white1: "#F8FAFD",
+        primary: "#C2E7FF",
       },
     },
   },
