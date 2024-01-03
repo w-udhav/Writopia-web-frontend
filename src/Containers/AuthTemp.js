@@ -8,7 +8,7 @@ export default function AuthTemp({ children }) {
   const route = location.pathname.split("/");
 
   return (
-    <div className="w-full h-screen flex justify-center items-center p-3 font-roboto">
+    <div className="w-full min-h-screen flex justify-center items-center p-3 font-roboto">
       <div className="max-w-[27rem] w-full rounded-xl shadow-lg bg-white border-2 border-zinc-200 overflow-hidden">
         <div className="p-4 py-5 flex flex-col items-center gap-3">
           <img src={logo} alt="logo" className="w-16" />

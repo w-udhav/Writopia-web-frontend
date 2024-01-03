@@ -5,6 +5,7 @@ import hero3 from "../../assets/images/home/hero (3).jpg";
 import hero4 from "../../assets/images/home/hero (4).jpg";
 import hero5 from "../../assets/images/home/hero5.png";
 import hero6 from "../../assets/images/home/hero6.jpg";
+import { Link } from "react-router-dom";
 
 const cat = [
   "Technology",
@@ -22,7 +23,7 @@ export default function Home() {
   return (
     <div className="w-full p-5">
       {/* Hero Section */}
-      <header className="relative w-full max-w-[1920px] h-[524px] m-auto rounded-[32px] overflow-hidden flex justify-center items-center">
+      <header className="relative w-full max-w-[1920px] h-[534px] m-auto rounded-[32px] overflow-hidden flex justify-center items-center">
         <div className="absolute top-0 left-0 w-full h-full -z-10">
           <img
             src={hero5}
@@ -37,9 +38,12 @@ export default function Home() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod,
             quibusdam.
           </p>
-          <button className="text-2xl rounded-full bg-white hover:bg-primary transition-all px-10 py-5">
+          <Link
+            to="/auth/login"
+            className="text-2xl rounded-full bg-white hover:bg-primary transition-all px-10 py-5"
+          >
             Login
-          </button>
+          </Link>
         </div>
       </header>
 
