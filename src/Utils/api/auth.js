@@ -35,3 +35,14 @@ export async function registerUser(credentials, setUser) {
     throw error.response.data.msg;
   }
 }
+
+export function logoutUser(setUser) {
+  try {
+    localStorage.removeItem("accessToken");
+    setUser(null);
+    return "success";
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+}

@@ -6,7 +6,7 @@ export default function Footer() {
   const [isHovered, setIsHovered] = React.useState(false);
   return (
     <div className="w-full border-t bg-zinc-50 mt-24">
-      <div className="max-w-[80rem] w-full mx-auto py-20">
+      <div className="max-w-[80rem] w-full mx-auto py-20 flex justify-between">
         <Link
           to="/"
           onClick={() => window.scrollTo(0, 0)}
@@ -27,6 +27,9 @@ export default function Footer() {
             )}
           </AnimatePresence>
         </Link>
+        <div className="font-pop">
+          <p>Udhav Wadhawan</p>
+        </div>
       </div>
     </div>
   );

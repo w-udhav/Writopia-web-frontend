@@ -42,7 +42,7 @@ export default function Home({ user }) {
       className="w-full"
     >
       {/* Hero Section */}
-      <div className="p-2">
+      <div className="p-2 flex flex-col gap-2">
         <header className="relative w-full max-w-[1920px] h-[534px] m-auto rounded-[32px] overflow-hidden flex justify-center items-center">
           <div className="absolute top-0 left-0 w-full h-full -z-10">
             <img

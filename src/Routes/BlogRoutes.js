@@ -1,11 +1,13 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import AllBlogs from "../Pages/Blogs/AllBlogs";
+import SingleBlog from "../Pages/Blogs/SingleBlog";
 
 export default function BlogRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<h1>Blog Home</h1>} />
-      <Route path="/:id" element={<h1>Blog Post</h1>} />
+      <Route path="/" element={<AllBlogs />} />
+      <Route path="/:id" element={<SingleBlog />} />
     </Routes>
   );
 }

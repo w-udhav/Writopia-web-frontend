@@ -9,11 +9,11 @@ import AdminRoutes from "./AdminRoutes";
 function PrivateRoute({ children, user }) {
   const location = useLocation();
 
-  return user ? (
-    children
-  ) : (
-    <Navigate to="/auth/login" replace state={{ from: location }} />
-  );
+  if (!user && !location.pathname.startsWith("/blog")) {
+    return <Navigate to="/auth/login" state={{ from: location }} />;
+  }
+
+  return children;
 }
 
 function LoggedInRoutes({ children, user }) {
