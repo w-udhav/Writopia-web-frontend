@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { loginUser } from "../../Utils/api/auth";
+import { AuthContext } from "../../extras/AuthContext";
 
 const initialFormData = Object.freeze({
   name: "",
@@ -11,6 +13,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
+
+  const { setUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -34,7 +38,7 @@ export default function Login() {
     }
     setLoading(true);
     try {
-      const res = await loginUser(formData);
+      const res = await loginUser(formData, setUser);
       console.log(res);
       if (res == "OK") {
         setFormData(initialFormData);
@@ -44,7 +48,7 @@ export default function Login() {
       }
     } catch (error) {
       console.log(error);
-      setError(error);
+      setError("There was an error");
     }
     setLoading(false);
   };
@@ -58,7 +62,13 @@ export default function Login() {
   }, [error]);
 
   return (
-    <div className="p-6 font-pop">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, type: "tween" }}
+      className="p-6 font-pop"
+    >
       <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <div>
           <label
@@ -110,6 +120,6 @@ export default function Login() {
           </div>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 }

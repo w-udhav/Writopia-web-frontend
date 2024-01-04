@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import hero1 from "../../assets/images/home/hero (1).jpg";
 import hero2 from "../../assets/images/home/hero (2).jpg";
 import hero3 from "../../assets/images/home/hero (3).jpg";
 import hero4 from "../../assets/images/home/hero (4).jpg";
 import hero5 from "../../assets/images/home/hero5.png";
 import hero6 from "../../assets/images/home/hero6.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import Footer from "../../Components/Footer";
 
 const cat = [
   "Technology",
@@ -18,34 +20,53 @@ const cat = [
   "Politics",
 ];
 
-export default function Home() {
-  const [isHovered, setIsHovered] = React.useState(false);
+export default function Home({ user }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleVisitViewALl = () => {
+    if (user) {
+      return navigate("/blog");
+    } else {
+      return navigate("/auth/login");
+    }
+  };
+
   return (
-    <div className="w-full p-5">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, type: "spring" }}
+      className="w-full"
+    >
       {/* Hero Section */}
-      <header className="relative w-full max-w-[1920px] h-[534px] m-auto rounded-[32px] overflow-hidden flex justify-center items-center">
-        <div className="absolute top-0 left-0 w-full h-full -z-10">
-          <img
-            src={hero5}
-            alt=""
-            className="w-full h-full object-cover object-center "
-          />
-          {/* <div className="bg-black w-full h-full absolute top-0 left-0 bg-opacity-10"></div> */}
-        </div>
-        <div className="p-10 font-pop flex flex-col items-center gap-6 z-20">
-          <h1 className="text-8xl font-medium">Getting Started</h1>
-          <p className="text-xl text-center">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod,
-            quibusdam.
-          </p>
-          <Link
-            to="/auth/login"
-            className="text-2xl rounded-full bg-white hover:bg-primary transition-all px-10 py-5"
-          >
-            Login
-          </Link>
-        </div>
-      </header>
+      <div className="p-2">
+        <header className="relative w-full max-w-[1920px] h-[534px] m-auto rounded-[32px] overflow-hidden flex justify-center items-center">
+          <div className="absolute top-0 left-0 w-full h-full -z-10">
+            <img
+              src={hero5}
+              alt=""
+              className="w-full h-full object-cover object-center "
+            />
+            {/* <div className="bg-black w-full h-full absolute top-0 left-0 bg-opacity-10"></div> */}
+          </div>
+          <div className="p-10 font-pop flex flex-col items-center gap-6 z-20">
+            <h1 className="text-8xl font-medium">Getting Started</h1>
+            <p className="text-xl text-center">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod,
+              quibusdam.
+            </p>
+            <Link
+              to={user ? "/blog" : "/auth/login"}
+              className="text-2xl rounded-full bg-white hover:bg-primary transition-all px-10 py-5"
+            >
+              {user ? "Visit Blog" : "Login"}
+            </Link>
+          </div>
+        </header>
+      </div>
 
       <main className="mx-auto max-w-[80rem] w-full mt-24 flex flex-col gap-28">
         <section className="flex flex-col gap-5">
@@ -55,7 +76,7 @@ export default function Home() {
               <button
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className="w-full rounded-[32px] overflow-hidden bg-[#F8FAFD] hover:bg-sky-100 transition-all"
+                className="w-full text-left rounded-[32px] overflow-hidden bg-[#F8FAFD] hover:bg-sky-100 transition-all"
               >
                 <div className="relative w-full h-[400px] rounded-[32px] overflow-hidden">
                   <img
@@ -85,7 +106,15 @@ export default function Home() {
             </div>
 
             <div className="w-[30%]">
-              <h1 className="font-pop"> Recent Blogs</h1>
+              <div className="flex justify-between gap-2 items-center">
+                <h4 className="font-pop"> Recent Blogs</h4>
+                <button
+                  onClick={handleVisitViewALl}
+                  className="font-pop text-[14px] font-medium text-sky-500"
+                >
+                  View all
+                </button>
+              </div>
               <div className="flex flex-col gap-2">
                 <button className="border border-zinc-50 rounded-xl flex gap-2 items-center p-2 bg-white1 text-left">
                   <img
@@ -123,6 +152,8 @@ export default function Home() {
           </div>
         </section>
       </main>
-    </div>
+
+      <Footer />
+    </motion.div>
   );
 }

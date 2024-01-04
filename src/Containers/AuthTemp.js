@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import bg from "../assets/backgrounds/auth.svg";
 import logo from "../assets/svg/logo.svg";
 const { useLocation } = require("react-router-dom");
@@ -8,7 +9,13 @@ export default function AuthTemp({ children }) {
   const route = location.pathname.split("/");
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center p-3 font-roboto">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, type: "tween" }}
+      className="w-full min-h-screen flex justify-center items-center p-3 font-roboto"
+    >
       <div className="max-w-[27rem] w-full rounded-xl shadow-lg bg-white border-2 border-zinc-200 overflow-hidden">
         <div className="p-4 py-5 flex flex-col items-center gap-3">
           <img src={logo} alt="logo" className="w-16" />
@@ -40,6 +47,6 @@ export default function AuthTemp({ children }) {
       <div className="fixed top-0 left-0 w-full h-full -z-10">
         <img src={bg} alt="background" className="object-cover w-full h-full" />
       </div>
-    </div>
+    </motion.div>
   );
 }

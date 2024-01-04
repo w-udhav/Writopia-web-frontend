@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../../Utils/api/auth";
+import { AuthContext } from "../../extras/AuthContext";
 
 const initialFormData = Object.freeze({
   username: "",
@@ -12,6 +13,8 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
+
+  const { setUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -35,7 +38,7 @@ export default function Signup() {
     }
     setLoading(true);
     try {
-      const res = await registerUser(formData);
+      const res = await registerUser(formData, setUser);
       if (res == "OK") {
         setFormData(initialFormData);
         setTimeout(() => {
