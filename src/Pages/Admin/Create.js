@@ -4,16 +4,17 @@ import hero1 from "../../assets/images/home/hero (3).jpg";
 import redirect from "../../assets/svg/redirect.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import cross from "../../assets/svg/cross.svg";
 
 const initialValue = {
   title: "",
   content: "",
   category: "",
-  cover: "",
 };
 
 export default function Create() {
   const [data, setData] = useState(initialValue);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [category, setCategory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [onSuccess, setOnSuccess] = useState(false);
@@ -22,29 +23,6 @@ export default function Create() {
   const date = new Date();
 
   let blogId;
-
-  const fields = [
-    {
-      name: "title",
-      type: "text",
-      placeholder: "Title",
-    },
-    {
-      name: "content",
-      type: "textarea",
-      placeholder: "Content",
-    },
-    {
-      name: "category",
-      type: "select",
-      placeholder: "select category",
-    },
-    {
-      name: "cover",
-      type: "file",
-      placeholder: "Cover",
-    },
-  ];
 
   const handlePreview = () => {
     window.open(`/blog/${blogId}`, "_blank");
@@ -65,15 +43,15 @@ export default function Create() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("category", data.category);
+    formData.append("image", selectedFile);
     setOnSuccess(false);
     setLoading(true);
     try {
-      const res = await axiosInstance.post("/blog", {
-        title: data.title,
-        content: data.content,
-        category: data.category,
-      });
+      const res = await axiosInstance.post("/blog", formData);
       console.log(res.data);
       blogId = res.data.newBlog._id;
       setLoading(false);
@@ -103,71 +81,73 @@ export default function Create() {
           Write your blog here. Let your imagination run wild.
         </p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          {fields.map((item, index) => {
-            return (
-              <div key={index} className="flex flex-col gap-[1px]">
-                <label
-                  htmlFor={item.name}
-                  className="capitalize text-[14px] font-pop"
-                >
-                  {" "}
-                  {item.name}
-                </label>
-                {item.type === "text" && (
-                  <input
-                    type={item.type}
-                    name={item.name}
-                    id={item.name}
-                    onChange={handleChange}
-                    placeholder={item.placeholder}
-                    className="w-full outline-none border-2 border-zinc-300 rounded-lg focus:border-sky-500 p-1"
-                  />
-                )}
-                {item.type === "textarea" && (
-                  <textarea
-                    name={item.name}
-                    id={item.name}
-                    cols="30"
-                    rows="10"
-                    placeholder={item.placeholder}
-                    className="w-full outline-none border-2 border-zinc-300 rounded-lg focus:border-sky-500 p-1"
-                    onChange={handleChange}
-                  ></textarea>
-                )}
-                {item.type === "select" && (
-                  <select
-                    name={item.name}
-                    id={item.name}
-                    className="w-full outline-none border-2 border-zinc-300 rounded-lg focus:border-sky-500 p-1"
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Category</option>
-                    {category?.map((item, index) => {
-                      return (
-                        <option key={index} value={item._id}>
-                          {item.name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                )}
-                {item.type === "file" && (
-                  <input
-                    type={item.type}
-                    name={item.name}
-                    id={item.name}
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      setData({ ...data, cover: file });
-                    }}
-                    placeholder={item.placeholder}
-                    className="w-full outline-none border-2 border-zinc-300 rounded-lg focus:border-sky-500 p-1"
-                  />
-                )}
-              </div>
-            );
-          })}
-          <br />
+          <div className="flex flex-col gap-[1px]">
+            <label htmlFor="title" className="capitalize text-[14px] font-pop">
+              Title
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={data.title}
+              onChange={handleChange}
+              className="w-full outline-none border-2 border-zinc-300 rounded-lg focus:border-sky-500 p-1"
+            />
+          </div>
+          <div className="flex flex-col gap-[1px]">
+            <label htmlFor="title" className="capitalize text-[14px] font-pop">
+              Content
+            </label>
+            <textarea
+              name="content"
+              value={data.content}
+              onChange={handleChange}
+              cols="30"
+              rows="10"
+              className="w-full outline-none border-2 border-zinc-300 rounded-lg focus:border-sky-500 p-1"
+            ></textarea>
+          </div>
+          <div className="flex flex-col gap-[1px]">
+            <label
+              htmlFor="category"
+              className="capitalize text-[14px] font-pop"
+            >
+              Category
+            </label>
+            <select
+              name="category"
+              value={data.category}
+              onChange={handleChange}
+              className="w-full outline-none border-2 border-zinc-300 rounded-lg focus:border-sky-500 p-1"
+            >
+              <option value="">Select Category</option>
+              {category?.map((item, index) => {
+                return (
+                  <option key={index} value={item._id}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className="flex flex-col gap-[1px]">
+            <label htmlFor="title" className="capitalize text-[14px] font-pop">
+              Image
+            </label>
+            <div className="relative flex gap-2 justify-between items-center">
+              <input
+                type="file"
+                name="image"
+                onChange={(e) => setSelectedFile(e.target.files[0])}
+                className="w-full outline-none border-2 border-zinc-300 rounded-lg focus:border-sky-500 p-1"
+              />
+              <button
+                onClick={() => setSelectedFile(null)}
+                className="rounded-full p-1 bg-sky-50"
+              >
+                <img src={cross} className="w-5 h-5" alt="cross" />
+              </button>
+            </div>
+          </div>
           <button
             disabled={loading}
             className="rounded-lg p-1 bg-[#1A7F37] disabled:bg-green-800 text-white font-semibold"

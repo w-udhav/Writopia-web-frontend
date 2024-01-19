@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import hero1 from "../../assets/images/home/hero (1).jpg";
-import hero2 from "../../assets/images/home/hero (2).jpg";
-import hero3 from "../../assets/images/home/hero (3).jpg";
-import hero4 from "../../assets/images/home/hero (4).jpg";
+import React, { useContext, useState } from "react";
+
 import hero5 from "../../assets/images/home/hero5.png";
 import hero6 from "../../assets/images/home/hero6.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "../../Components/Footer";
+import { AuthContext } from "../../extras/AuthContext";
 
 const cat = [
   "Technology",
@@ -24,6 +22,7 @@ export default function Home({ user }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const navigate = useNavigate();
+  const { setBlogModal } = useContext(AuthContext);
 
   const handleVisitViewALl = () => {
     if (user) {
@@ -58,12 +57,22 @@ export default function Home({ user }) {
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod,
               quibusdam.
             </p>
-            <Link
-              to={user ? "/blog" : "/auth/login"}
-              className="text-2xl rounded-full bg-white hover:bg-primary transition-all px-10 py-5"
-            >
-              {user ? "Visit Blog" : "Login"}
-            </Link>
+            <div className="pt-4">
+              <Link
+                to={user ? "/blog" : "/auth/login"}
+                className="text-2xl rounded-full bg-white hover:bg-primary transition-all px-10 py-5"
+              >
+                {user ? "Visit Blog" : "Login"}
+              </Link>
+              {user && (
+                <button
+                  onClick={() => setBlogModal(true)}
+                  className="text-2xl rounded-full bg-white hover:bg-primary transition-all px-10 py-5 ml-5"
+                >
+                  Add Blog
+                </button>
+              )}
+            </div>
           </div>
         </header>
       </div>
