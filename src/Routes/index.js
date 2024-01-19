@@ -9,35 +9,16 @@ import AdminRoutes from "./AdminRoutes";
 function PrivateRoute({ children, user }) {
   const location = useLocation();
 
-  if (!user && !location.pathname.startsWith("/blog")) {
-    return <Navigate to="/auth/login" state={{ from: location }} />;
-  }
-
   return children;
 }
 
-function LoggedInRoutes({ children, user }) {
-  const location = useLocation();
-
-  return user ? (
-    <Navigate to="/blog" replace state={{ from: location }} />
-  ) : (
-    children
-  );
-}
 export default function Index() {
   const { user } = useContext(AuthContext);
+
   return (
     <Routes>
       <Route path="/" element={<Home user={user} />} />
-      <Route
-        path="auth/*"
-        element={
-          <LoggedInRoutes user={user}>
-            <AuthRoutes />
-          </LoggedInRoutes>
-        }
-      />
+      <Route path="auth/*" element={<AuthRoutes />} />
       <Route
         path="blog/*"
         element={

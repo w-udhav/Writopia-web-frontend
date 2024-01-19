@@ -11,8 +11,8 @@ export async function loginUser(credentials, setUser) {
     const token = response.data.token;
     localStorage.setItem("accessToken", token);
     axiosInstance.defaults.headers["Authorization"] = `Bearer ${token}`;
-    setUser({ token });
-    return response.statusText;
+    setUser(response.data.user);
+    return response;
   } catch (error) {
     console.log(error.message);
     throw error;
@@ -28,10 +28,9 @@ export async function registerUser(credentials, setUser) {
     const token = response.data.token;
     localStorage.setItem("accessToken", token);
     axiosInstance.defaults.headers["Authorization"] = `Bearer ${token}`;
-    await loginUser(credentials, setUser);
-    return response.response.statusText;
+    setUser(response.data.user);
+    return response;
   } catch (error) {
-    console.log(error.response.data.msg);
     throw error.response.data.msg;
   }
 }

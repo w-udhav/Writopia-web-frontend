@@ -12,9 +12,8 @@ const initialFormData = Object.freeze({
 export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
-  const [error, setError] = useState(null);
 
-  const { setUser } = useContext(AuthContext);
+  const { setUser, setModalData } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -27,38 +26,36 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (error) setError(null);
     if (
       formData.username === "" ||
       formData.email === "" ||
       formData.password === ""
     ) {
-      setError("Please fill all the fields");
+      setModalData({
+        type: "ERROR",
+        msg: "Please fill all the fields",
+      });
       return;
     }
     setLoading(true);
     try {
       const res = await registerUser(formData, setUser);
-      if (res == "OK") {
+      if (res.status === 201) {
         setFormData(initialFormData);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+        navigate("/auth/verifying");
+        setModalData({
+          type: "SUCCESS",
+          msg: "Verification email sent",
+        });
       }
     } catch (error) {
-      console.log(error);
-      setError(error);
+      setModalData({
+        type: "ERROR",
+        msg: error,
+      });
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setError(null);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [error]);
 
   return (
     <div className="p-6 font-pop">
@@ -108,9 +105,7 @@ export default function Signup() {
             className="border border-gray-300 p-1 w-full rounded-md"
           />
         </div>
-        {error && (
-          <div className="text-red-500 text-[13px] font-medium">{error}</div>
-        )}
+
         <div className="flex flex-col gap-3">
           <button
             type="submit"

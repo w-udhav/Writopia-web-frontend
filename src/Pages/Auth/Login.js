@@ -14,7 +14,7 @@ export default function Login() {
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
 
-  const { setUser } = useContext(AuthContext);
+  const { setUser, setModalData } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -33,33 +33,33 @@ export default function Login() {
       formData.email === "" ||
       formData.password === ""
     ) {
-      setError("Please fill all the fields");
+      setModalData({
+        type: "ERROR",
+        msg: "Please fill all the fields",
+      });
       return;
     }
     setLoading(true);
     try {
       const res = await loginUser(formData, setUser);
-      console.log(res);
-      if (res == "OK") {
+      if (res.status === 200) {
         setFormData(initialFormData);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+        setModalData({
+          type: "SUCCESS",
+          msg: "Login Successful",
+        });
       }
+      setUser(res.data.user);
+      navigate("/");
     } catch (error) {
       console.log(error);
-      setError("There was an error");
+      setModalData({
+        type: "ERROR",
+        msg: error,
+      });
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setError(null);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [error]);
 
   return (
     <motion.div
@@ -101,9 +101,7 @@ export default function Login() {
             className="border border-gray-300 p-1 w-full rounded-md"
           />
         </div>
-        {error && (
-          <div className="text-red-500 text-[13px] font-medium">{error}</div>
-        )}
+
         <div className="flex flex-col gap-3">
           <button
             disabled={loading}

@@ -36,8 +36,11 @@ export default function AuthTemp({ children }) {
                 </p>
               </div>
             )}
-            {route.includes("forgot-password") && "Forgot Password"}
-            {route.includes("reset-password") && "Reset Password"}
+            {route.includes("verifying") && (
+              <div className="flex flex-col gap-3">
+                <h1 className="font-bold text-3xl">Verificaton</h1>
+              </div>
+            )}
           </div>
         </div>
         <div className="bg-zinc-100 w-full">{children}</div>

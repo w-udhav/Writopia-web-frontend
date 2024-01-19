@@ -3,12 +3,14 @@ import axiosInstance from "../Utils/api/axiosInstance";
 import SessionExpired from "../Components/Modal";
 import Modal from "../Components/Modal";
 import { useNavigate } from "react-router-dom";
+import BlogModal from "../Components/BlogModal";
+import { AnimatePresence } from "framer-motion";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [blogModal, setBlogModal] = useState(false); // [1
   const [modalData, setModalData] = useState({
     type: "",
     msg: "",
@@ -24,43 +26,29 @@ export function AuthProvider({ children }) {
       console.log(error.response);
       if (error.response && error.response.status === 401) {
         // If the status code is 401
-        setShowModal(true); // Show the modal
         setModalData({
           type: "ERROR",
           msg: "Session Expired. Please login again.",
         });
+      } else {
+        setModalData({
+          type: "ERROR",
+          msg: "Something went wrong. Please try again later.",
+        });
       }
+      localStorage.removeItem("accessToken"); // Remove the access token from the local storage
     }
   };
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       getUserData();
+      setInterval(() => {
+        getUserData();
+      }, 1000 * 60 * 5); // 5 minutes
     }
-  }, []);
-
-  useEffect(() => {
-    if (modalData.type) {
-      setTimeout(() => {
-        setModalData({
-          type: "",
-          msg: "",
-        });
-      }, 5000);
-    }
-  }, [modalData]);
-
-  useEffect(() => {
-    if (user) {
-      setShowModal(false);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (showModal) {
-      navigate("/auth/login"); // Navigate to the login page
-    }
-  }, [showModal, navigate]);
+  }, []); // Empty dependency array
 
   return (
     <AuthContext.Provider
@@ -69,10 +57,18 @@ export function AuthProvider({ children }) {
         setUser,
         modalData,
         setModalData,
+        setBlogModal,
       }}
     >
       {children}
-      {showModal && <Modal type="ERROR" msg="" />}
+      {modalData.type !== "" && (
+        <Modal modalData={modalData} setModalData={setModalData} />
+      )}
+      <AnimatePresence>
+        {blogModal && (
+          <BlogModal setBlogModal={setBlogModal} setModalData={setModalData} />
+        )}
+      </AnimatePresence>
     </AuthContext.Provider>
   );
 }

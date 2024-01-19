@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import hero from "../../assets/images/home/hero (1).jpg";
-import more from "../../assets/svg/more-h.svg";
 import axiosInstance from "../../Utils/api/axiosInstance";
 import { motion } from "framer-motion";
 
